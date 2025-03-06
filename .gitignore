@@ -24,3 +24,5 @@ Thumbs.db
 
 *.lps
 /lista-simple/backup
+*.lpi
+*.compiled

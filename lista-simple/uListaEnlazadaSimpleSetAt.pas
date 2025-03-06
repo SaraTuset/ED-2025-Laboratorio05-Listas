@@ -236,8 +236,19 @@ implementation
 
     { Ejercicio 3 }
     procedure set_at(var list: tListaSimple; pos: integer; x: integer);
+    var
+        current: ^nodo;
+        i: Integer;
     begin
-        WriteLn('set_at: Not implemented');
+        if (pos <= num_elems(list)) and (pos > 0) then
+        begin
+           current:= list.first;
+           for i:= 2 to pos do
+               current:= current^.sig;
+           WriteLn(current^.info);
+           current^.info := x;
+        end;
+
     end;
 
 end.
