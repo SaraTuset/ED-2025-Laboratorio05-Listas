@@ -26,3 +26,4 @@ Thumbs.db
 /lista-simple/backup
 *.lpi
 *.compiled
+/lista-circular/backup
