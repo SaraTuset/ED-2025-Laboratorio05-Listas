@@ -13,12 +13,27 @@ end;
 
 
 { 
-    Implementar un subprograma que reciba una lista de enteros y devuelva dos listas, una con los números pares y otra con los impares.
+    Implementar un subprograma que reciba una lista de enteros y devuelva
+    dos listas, una con los números pares y otra con los impares.
     La lista original no debe ser modificada.
 }
 procedure dividir_lista_en_pares_e_impares(var list: tListaSimple; var pares, impares: tListaSimple);
+var
+    i, final, e: Integer;
 begin
-    WriteLn('No implementado');
+    initialize(pares);
+    initialize(impares);
+    final:= num_elems(list);
+    for i:= 1 to final do
+    begin
+       e:= first(list);
+       delete_at_begin(list);
+       if (e mod 2) = 0 then
+          insert_at_end(pares, e)
+       else
+           insert_at_end(impares, e);
+       insert_at_end(list, e);
+    end;
 end;
 
 
