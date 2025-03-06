@@ -16,23 +16,23 @@ type
     end;
 
     {Operaciones básicas}
-    procedure initialize(var list: tListaSimple);     //0(1)
-    function is_empty(list: tListaSimple): boolean;   //0(1)
-    function first(list: tListaSimple): integer;      //0(1)
-    function last(list: tListaSimple): integer;       //0(1)
-    procedure insert_at_end(var list: tListaSimple; x: integer);     //0(1)
-    procedure insert_at_begin(var list: tListaSimple; x: integer);   //0(1)
-    procedure delete_at_end(var list: tListaSimple);                 //0(n)
-    procedure delete_at_begin(var list: tListaSimple);               //0(1)
-    procedure delete(var list: tListaSimple; x: integer);            //0(n)
-    function in_list(list: tListaSimple; x: integer): boolean;       //0(n)
-    function rec_in_list(list: tListaSimple; x: integer): boolean;   //0(n)
+    procedure initialize(var list: tListaSimple);
+    function is_empty(list: tListaSimple): boolean;
+    function first(list: tListaSimple): integer;
+    function last(list: tListaSimple): integer;
+    procedure insert_at_end(var list: tListaSimple; x: integer);
+    procedure insert_at_begin(var list: tListaSimple; x: integer);
+    procedure delete_at_end(var list: tListaSimple);
+    procedure delete_at_begin(var list: tListaSimple);
+    procedure delete(var list: tListaSimple; x: integer);
+    function in_list(list: tListaSimple; x: integer): boolean;
+    function rec_in_list(list: tListaSimple; x: integer): boolean;
 
     {Otras operaciones}
-    function to_string(list: tListaSimple): string;           //0(n)
-    procedure clear(var list: tListaSimple);                  //0(n)
-    function num_elems(list: tListaSimple): integer;          //0(n)
-    procedure copy(list: tListaSimple; var c2: tListaSimple); //0(n)
+    function to_string(list: tListaSimple): string;
+    procedure clear(var list: tListaSimple);
+    function num_elems(list: tListaSimple): integer;
+    procedure copy(list: tListaSimple; var c2: tListaSimple);
 
 implementation
 

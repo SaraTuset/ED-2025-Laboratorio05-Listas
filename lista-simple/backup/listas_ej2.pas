@@ -63,9 +63,6 @@ begin
     WriteLn('El 2 esta el la lista = ', in_list(lista, 2));
 
     // 2.10 Verificar recursivamente si un elemento está en la lista
-    WriteLn('Recursivamente:');
-    WriteLn('El 3 esta el la lista = ', rec_in_list(lista, 3));
-    WriteLn('El 2 esta el la lista = ', rec_in_list(lista, 2));
 
 
     readln;
