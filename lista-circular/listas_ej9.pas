@@ -11,8 +11,19 @@ begin
 end;
 
 procedure eliminar_duplicados(var list: tListaCircular);
+var
+    aux: tListaCircular;
+    elem: Integer;
 begin
-    WriteLn('No implementado');
+    initialize(aux);
+    while not is_empty(list) do
+    begin
+       elem := first(list);
+       if not in_list(aux, elem) then
+           insert_at_end(aux, elem);
+       delete(list, elem);
+    end;
+    list := aux;
 end;
 
 
