@@ -14,8 +14,8 @@ begin
 end;
 
 var
-  lista: tListaSimpleMod;
-  listaCopiada: tListaSimpleMod;
+  lista: tListaSimple;
+  listaCopiada: tListaSimple;
   valorEnRango, valorFueraRango: Integer;
   contenido, contenidoFrecuencias: string;
   insercionCorrecta, busquedaCorrecta, copiaCorrecta: Boolean;

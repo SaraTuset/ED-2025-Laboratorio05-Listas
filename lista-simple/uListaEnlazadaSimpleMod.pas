@@ -1,9 +1,13 @@
-unit uListaEnlazadaSimple;
+unit uListaEnlazadaSimpleMod;
 
 interface
 
 uses
     SysUtils;
+
+const
+  MIN_RANGE = 1;
+  MAX_RANGE = 100;
 
 type
     nodo = record
@@ -11,9 +15,13 @@ type
         sig: ^nodo; // Puntero al siguiente nodo
     end;
 
+    tFrecuencias = Array [MIN_RANGE.. MAX_RANGE] of Integer;
+
     tListaSimple = record
         first, last: ^nodo; // Punteros al primer y último nodo de la lista
+        frecuencias: tFrecuencias;
     end;
+
 
     {Operaciones básicas}
     procedure initialize(var list: tListaSimple);
@@ -33,13 +41,19 @@ type
     procedure clear(var list: tListaSimple);
     function num_elems(list: tListaSimple): integer;
     procedure copy(list: tListaSimple; var c2: tListaSimple);
+    function get_frequency(list:tListaSimple; x: Integer): Integer;
+    function frequency_to_string(list:tListaSimple): String;
 
 implementation
 
     procedure initialize(var list: tListaSimple);
+    var
+        i:Integer;
     begin
         list.first := nil; // Inicializa la lista vacía
         list.last := nil; // Inicializa la lista vacía
+        for i:= MIN_RANGE to MAX_RANGE do
+            list.frecuencias[i] := 0;
     end;
 
     function is_empty(list: tListaSimple): boolean;
@@ -63,26 +77,34 @@ implementation
     var
         newNode: ^nodo;
     begin
-        new(newNode); // Crea un nuevo nodo
-        newNode^.info := x; // Asigna el valor al nuevo nodo
-        newNode^.sig := nil; // El siguiente nodo es nil porque es el último
-        if is_empty(list) then
-            list.first := newNode // Si la lista está vacía, el nuevo nodo es el primero
-        else
-            list.last^.sig := newNode; // Si no, se enlaza al final de la lista
-        list.last := newNode; // Actualiza el último nodo de la lista
+        if (MIN_RANGE <= x) and (x <= MAX_RANGE) then
+        begin
+          new(newNode); // Crea un nuevo nodo
+          newNode^.info := x; // Asigna el valor al nuevo nodo
+          newNode^.sig := nil; // El siguiente nodo es nil porque es el último
+          if is_empty(list) then
+              list.first := newNode // Si la lista está vacía, el nuevo nodo es el primero
+          else
+              list.last^.sig := newNode; // Si no, se enlaza al final de la lista
+          list.last := newNode; // Actualiza el último nodo de la lista
+          list.frecuencias[x] += 1;
+        end;
     end;
 
     procedure insert_at_begin(var list: tListaSimple; x: integer);
     var
         newNode: ^nodo;
     begin
+        if (MIN_RANGE <= x) and (x <= MAX_RANGE) then
+        begin
         new(newNode); // Crea un nuevo nodo
         newNode^.info := x; // Asigna el valor al nuevo nodo
         newNode^.sig := list.first; // El siguiente nodo es el actual primer nodo
         list.first := newNode; // El nuevo nodo es ahora el primer nodo
         if list.last = nil then
             list.last := newNode; // Si la lista estaba vacía, el nuevo nodo es también el último
+        list.frecuencias[x] += 1;
+        end;
     end;
 
     procedure delete_at_end(var list: tListaSimple);
@@ -100,16 +122,19 @@ implementation
             end;
             if prev = nil then // Solo hay un elemento en la lista
             begin
+                list.frecuencias[list.first^.info] -= 1;
                 dispose(list.first); // Libera el nodo
                 list.first := nil;
                 list.last := nil;
             end
             else // Hay más de un elemento en la lista
             begin
+                list.frecuencias[current^.info] -= 1;
                 dispose(current); // Libera el nodo
                 prev^.sig := nil; // El penúltimo nodo es ahora el último
                 list.last := prev; // Actualiza el último nodo de la lista
             end;
+
         end;
     end;
 
@@ -120,10 +145,11 @@ implementation
         if not is_empty(list) then
         begin
             temp := list.first; // Guarda el primer nodo
+            list.frecuencias[list.first^.info] -= 1;
             list.first := list.first^.sig; // El segundo nodo es ahora el primero
             dispose(temp); // Libera el nodo
             if list.first = nil then
-                list.last := nil; // Si la lista está vacía, actualiza el último nodo
+
         end;
     end;
 
@@ -147,6 +173,7 @@ implementation
             if current = list.last then // Si el nodo a eliminar es el último
                 list.last := prev;
             dispose(current); // Libera el nodo
+            list.frecuencias[x] -= 1;
         end;
     end;
 
@@ -154,10 +181,10 @@ implementation
     var
         current: ^nodo;
     begin
-        current := list.first;
-        while (current <> nil) and (current^.info <> x) do
-            current := current^.sig;
-        in_list := current <> nil; // Devuelve true si se encontró el elemento
+        if (MIN_RANGE <= x) and (x <= MAX_RANGE) then
+           in_list := list.frecuencias[x] > 0
+        else
+            in_list := False;
     end;
 
     function rec_in_list(list: tListaSimple; x: integer): boolean;
@@ -198,6 +225,7 @@ implementation
         while list.first <> nil do
         begin
             temp := list.first;
+            list.frecuencias[temp^.info] -= 1;
             list.first := list.first^.sig;
             dispose(temp); // Libera cada nodo
         end;
@@ -230,6 +258,27 @@ implementation
             insert_at_end(c2, current^.info); // Inserta cada elemento en la lista de destino
             current := current^.sig;
         end;
+    end;
+
+    function get_frequency(list:tListaSimple; x: Integer): Integer;
+    begin
+        get_frequency := list.frecuencias[x];
+    end;
+
+    function frequency_to_string(list:tListaSimple): String;
+    var
+        s: String;
+        i: Integer;
+    begin
+        s:= '';
+        for i:= MIN_RANGE to MAX_RANGE do
+            if list.frecuencias[i] > 0 then
+            begin
+               if s <> '' then
+                  s += ', ';
+               s := s + IntToStr(i) + ': ' + IntToStr(list.frecuencias[i]);
+            end;
+        frequency_to_string := s;
     end;
 
 end.

@@ -11,6 +11,8 @@ type
         sig: ^nodo; // Puntero al siguiente nodo
     end;
 
+    TPNodo = ^nodo;
+
     tListaCircular = record
         last: ^nodo; // Puntero al último nodo de la lista
     end;
@@ -170,10 +172,20 @@ implementation
         to_string := s; // Devuelve la lista como cadena
     end;
 
+    function to_string_rec_aux(node: TPNodo; list: tListaCircular): string;
+    begin
+        if  node = list.last then
+           to_string_rec_aux := ''
+        else
+            to_string_rec_aux := ', ' + IntToStr(node^.info) + to_string_rec_aux(list.last^.sig, list);
+    end;
 
     function to_string_rec(list: tListaCircular): string;
     begin
-        WriteLn('No implementado');
+        if is_empty(list) then
+           to_string_rec := ''
+        else
+            to_string_rec := IntToStr(list.last^.info) + to_string_rec_aux(list.last^.sig, list);
     end;
 
 
@@ -213,15 +225,26 @@ implementation
 
 
     { Ejercicio 8 }
+    function num_elems_rec_aux(node: TPNodo; list: tListaCircular): Integer;
+    begin
+        if node = list.last then
+           num_elems_rec_aux := 0
+        else
+            num_elems_rec_aux := 1 + num_elems_rec_aux(node^.sig, list);
+    end;
+
     function num_elems_rec(list: tListaCircular): integer;
     begin
-        WriteLn('No implementado');
+        if is_empty(list) then
+           num_elems_rec := 0
+        else
+            num_elems_rec := 1 + num_elems_rec_aux(list.last^.sig, list);
     end;
 
 
     procedure copy(list: tListaCircular; var c2: tListaCircular);
     var
-        aux, new_node: ^nodo;
+        aux: ^nodo;
     begin
         initialize(c2); // Inicializa la nueva lista
         if not is_empty(list) then
